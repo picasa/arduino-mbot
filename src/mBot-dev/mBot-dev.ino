@@ -149,17 +149,17 @@ void setup()
   Stop();
   rgb.setNumber(16);
   rgb.clear();
-  
+
   rgb.setColor(100, 0, 0);
-  buzzer.tone(NTD4, 200); 
+  buzzer.tone(NTD4, 200);
   delay(200);
   rgb.clear();
-  
+
   rgb.setColor(0, 100, 0);
   buzzer.tone(NTD3, 200);
   delay(200);
   rgb.clear();
-  
+
   Serial.begin(115200);
   buzzer.noTone();
   ir.begin();
@@ -173,7 +173,7 @@ void setup()
   matrix.drawBitmap(0,0,16,drawBuffer);
 }
 unsigned char readBuffer(int index){
- return buffer[index]; 
+ return buffer[index];
 }
 void writeBuffer(int index,unsigned char c){
   buffer[index]=c;
@@ -183,7 +183,7 @@ void writeHead(){
   writeSerial(0x55);
 }
 void writeEnd(){
- Serial.println(); 
+ Serial.println();
 }
 void writeSerial(unsigned char c){
  Serial.write(c);
@@ -201,14 +201,14 @@ void serialHandle(){
     unsigned char c = serialRead&0xff;
     if(c==0x55&&isStart==false){
      if(prevc==0xff){
-      index=1; 
+      index=1;
       isStart = true;
      }
     }else{
       prevc = c;
       if(isStart){
         if(index==2){
-         dataLen = c; 
+         dataLen = c;
         }else if(index>2){
           dataLen--;
         }
@@ -217,12 +217,12 @@ void serialHandle(){
     }
      index++;
      if(index>51){
-      index=0; 
+      index=0;
       isStart=false;
      }
-     if(isStart&&dataLen==0&&index>3){ 
+     if(isStart&&dataLen==0&&index>3){
         isStart = false;
-        parseData(); 
+        parseData();
         index=0;
      }
   }
@@ -263,111 +263,111 @@ void get_ir_command()
         moveSpeed = 300;
         mode = MODE_A;
         Stop();
-        buzzer.tone(NTD1, 300); 
+        buzzer.tone(NTD1, 300);
         rgb.clear();
         rgb.setColor(10, 10, 10);
         break;
-      
+
       case IR_BUTTON_B:
         moveSpeed = 200;
         mode = MODE_B;
         Stop();
-        buzzer.tone(NTD2, 300); 
+        buzzer.tone(NTD2, 300);
         rgb.clear();
         rgb.setColor(0, 10, 0);
         break;
-      
+
       case IR_BUTTON_C:
         mode = MODE_C;
         moveSpeed = 120;
         Stop();
-        buzzer.tone(NTD3, 300); 
+        buzzer.tone(NTD3, 300);
         rgb.clear();
         rgb.setColor(0, 0, 10);
         break;
-      
+
       case IR_BUTTON_PLUS:
         motor_sta = RUN_F;
-        //buzzer.tone(NTD4, 300); 
+        //buzzer.tone(NTD4, 300);
         rgb.clear();
         rgb.setColor(10, 10, 0);
         //               Forward();
         break;
-      
+
       case IR_BUTTON_MINUS:
         motor_sta = RUN_B;
         rgb.clear();
         rgb.setColor(10, 0, 0);
-        //buzzer.tone(NTD4, 300); 
+        //buzzer.tone(NTD4, 300);
         //               Backward();
         break;
-      
+
       case IR_BUTTON_NEXT:
         motor_sta = RUN_R;
-        //buzzer.tone(NTD4, 300); 
+        //buzzer.tone(NTD4, 300);
         rgb.clear();
         rgb.setColor(1,10, 10, 0);
         //               TurnRight();
         break;
-      
+
       case IR_BUTTON_PREVIOUS:
         motor_sta = RUN_L;
-        //buzzer.tone(NTD4, 300); 
+        //buzzer.tone(NTD4, 300);
         rgb.clear();
         rgb.setColor(2,10, 10, 0);
         //               TurnLeft();
         break;
-      
+
       case IR_BUTTON_9:
-        buzzer.tone(NTDH2, 300); 
+        buzzer.tone(NTDH2, 300);
         delay(300);
         ChangeSpeed(factor * 9 + minSpeed);
         break;
-      
+
       case IR_BUTTON_8:
-        buzzer.tone(NTDH1, 300); 
+        buzzer.tone(NTDH1, 300);
         delay(300);
         ChangeSpeed(factor * 8 + minSpeed);
         break;
-      
+
       case IR_BUTTON_7:
-        buzzer.tone(NTD7, 300); 
+        buzzer.tone(NTD7, 300);
         delay(300);
         ChangeSpeed(factor * 7 + minSpeed);
         break;
-      
+
       case IR_BUTTON_6:
-        buzzer.tone(NTD6, 300); 
+        buzzer.tone(NTD6, 300);
         delay(300);
         ChangeSpeed(factor * 6 + minSpeed);
         break;
-      
+
       case IR_BUTTON_5:
-        buzzer.tone(NTD5, 300); 
+        buzzer.tone(NTD5, 300);
         delay(300);
         ChangeSpeed(factor * 5 + minSpeed);
         break;
-      
+
       case IR_BUTTON_4:
-        buzzer.tone(NTD4, 300); 
+        buzzer.tone(NTD4, 300);
         delay(300);
         ChangeSpeed(factor * 4 + minSpeed);
         break;
-      
+
       case IR_BUTTON_3:
-        buzzer.tone(NTD3, 300); 
+        buzzer.tone(NTD3, 300);
         delay(300);
         ChangeSpeed(factor * 3 + minSpeed);
         break;
-      
+
       case IR_BUTTON_2:
-        buzzer.tone(NTD2, 300); 
+        buzzer.tone(NTD2, 300);
         delay(300);
         ChangeSpeed(factor * 2 + minSpeed);
         break;
-      
+
       case IR_BUTTON_1:
-        buzzer.tone(NTD1, 300); 
+        buzzer.tone(NTD1, 300);
         delay(300);
         ChangeSpeed(factor * 1 + minSpeed);
         break;
@@ -388,7 +388,7 @@ void Forward()
 
 void Backward()
 {
-  MotorL.run(moveSpeed); 
+  MotorL.run(moveSpeed);
   MotorR.run(-moveSpeed);
 }
 
@@ -414,7 +414,7 @@ void Stop()
 uint8_t prevState = 0;
 void ChangeSpeed(int spd)
 {
-  buzzer.tone(NTD5, 300); 
+  buzzer.tone(NTD5, 300);
   moveSpeed = spd;
 }
 
@@ -426,22 +426,22 @@ void modeA()
       Forward();
       prevState = motor_sta;
       break;
-    
+
     case RUN_B:
       Backward();
       prevState = motor_sta;
       break;
-    
+
     case RUN_L:
       TurnLeft();
       prevState = motor_sta;
       break;
-    
+
     case RUN_R:
       TurnRight();
       prevState = motor_sta;
       break;
-    
+
     case STOP:
       if(prevState!=motor_sta){
         prevState = motor_sta;
@@ -458,7 +458,7 @@ void modeB()
   static long time = millis();
   randomSeed(analogRead(6));
   uint8_t randNumber = random(2);
-  
+
   if (distance > 25 || distance == 0) Forward();
   else if (distance > 15) {
     switch (randNumber)
@@ -572,7 +572,7 @@ void sendString(String s){
   }
 }
 //1 byte 2 float 3 short 4 len+string 5 double
-void sendFloat(float value){ 
+void sendFloat(float value){
      writeSerial(2);
      val.floatVal = value;
      writeSerial(val.byteVal[0]);
@@ -603,7 +603,7 @@ void sendDouble(double value){
 short readShort(int idx){
   valShort.byteVal[0] = readBuffer(idx);
   valShort.byteVal[1] = readBuffer(idx+1);
-  return valShort.shortVal; 
+  return valShort.shortVal;
 }
 float readFloat(int idx){
   val.byteVal[0] = readBuffer(idx);
@@ -631,14 +631,14 @@ uint8_t* readUint8(int idx,int len){
   return _receiveUint8;
 }
 void runModule(int device){
-  //0xff 0x55 0x6 0x0 0x2 0x22 0x9 0x0 0x0 0xa 
+  //0xff 0x55 0x6 0x0 0x2 0x22 0x9 0x0 0x0 0xa
   int port = readBuffer(6);
   int pin = port;
   switch(device){
    case MOTOR:{
      int speed = readShort(7);
      port==M1?MotorL.run(speed):MotorR.run(speed);
-   } 
+   }
     break;
     case JOYSTICK:{
      int leftSpeed = readShort(6);
@@ -758,9 +758,9 @@ void runModule(int device){
      pinMode(pin,OUTPUT);
      int hz = readShort(6);
      if(hz>0){
-       buzzer.tone(hz); 
+       buzzer.tone(hz);
      }else{
-       buzzer.noTone(); 
+       buzzer.noTone();
      }
    }
    break;
@@ -773,7 +773,7 @@ void runModule(int device){
    }
    break;
    case TIMER:{
-    lastTime = millis()/1000.0; 
+    lastTime = millis()/1000.0;
    }
    break;
   }
@@ -782,7 +782,7 @@ void readSensor(int device){
   /**************************************************
       ff    55      len idx action device port slot data a
       0     1       2   3   4      5      6    7    8
-      0xff  0x55   0x4 0x3 0x1    0x1    0x1  0xa 
+      0xff  0x55   0x4 0x3 0x1    0x1    0x1  0xa
   ***************************************************/
   float value=0.0;
   int port,slot,pin;
@@ -892,7 +892,7 @@ void readSensor(int device){
        pinMode(generalDevice.pin2(),INPUT_PULLUP);
        value = generalDevice.dRead2();
      }
-     sendFloat(value);  
+     sendFloat(value);
    }
    break;
    case BUTTON_INNER:{
