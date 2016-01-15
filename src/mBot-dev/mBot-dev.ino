@@ -6,7 +6,7 @@
 MeRGBLed rgb;
 MeLEDMatrix matrix(PORT_1);
 MeLineFollower line(PORT_2);
-MeUltrasonic ultrasonic(PORT_3);
+MeUltrasonic ultrasonic(PORT_4);
 MeIR ir;
 MeBuzzer buzzer;
 MeTemperature temperature;
