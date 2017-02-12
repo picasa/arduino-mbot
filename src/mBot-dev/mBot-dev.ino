@@ -6,7 +6,7 @@
 MeRGBLed rgb;
 MeLEDMatrix matrix(PORT_1);
 MeLineFollower line(PORT_2);
-MeUltrasonic ultrasonic(PORT_4);
+MeUltrasonic ultrasonic(PORT_3);
 MeIR ir;
 MeBuzzer buzzer;
 MeTemperature temperature;
@@ -165,12 +165,12 @@ void setup()
   ir.begin();
 
   matrix.clearScreen();
-  matrix.setColorIndex(1);
-  matrix.setBrightness(6);
-  drawTemp = new unsigned char[16]{0,0,254,130,147,147,147,130,130,130,147,187,147,130,254,0};
-  memcpy(drawBuffer,drawTemp,16);
-  free(drawTemp);
-  matrix.drawBitmap(0,0,16,drawBuffer);
+  // matrix.setColorIndex(1);
+  // matrix.setBrightness(6);
+  // drawTemp = new unsigned char[16]{0,0,254,130,147,147,147,130,130,130,147,187,147,130,254,0};
+  // memcpy(drawBuffer,drawTemp,16);
+  // free(drawTemp);
+  // matrix.drawBitmap(0,0,16,drawBuffer);
 }
 unsigned char readBuffer(int index){
  return buffer[index];

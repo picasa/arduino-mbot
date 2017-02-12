@@ -1,15 +1,15 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Servo.h>
-#include <Wire.h>
 #include <SoftwareSerial.h>
 #include <MeMCore.h>
 
 Servo servo;
 MeIR ir;
 MeLEDMatrix matrix(1);
-MePort port(3);
-MeUltrasonicSensor ultrasonic(4);
+MeLineFollower line(2);
+MeUltrasonicSensor ultrasonic(3);
+MePort port(4);
 MeDCMotor motor_left(M1);
 MeDCMotor motor_right(M2);
 MeRGBLed led_rgb(7, 7==7?2:4);
@@ -27,8 +27,7 @@ double distance_warn;
 enum
 {
   MODE_A,
-  MODE_B,
-  MODE_C
+  MODE_B
 };
 
 uint8_t mode = MODE_A;
@@ -36,7 +35,7 @@ uint8_t mode = MODE_A;
 void setup() {
 
   state = 0;
-  move_speed = 150;
+  move_speed = 200;
   angle_right = 50;
   angle_front = 90;
   angle_left = 130;
@@ -60,7 +59,7 @@ void loop()
 {
   while(1)
   {
-    get_ir_command();
+    check_button();
     //serialHandle();
     switch (mode)
     {
@@ -71,8 +70,6 @@ void loop()
       break;
     case MODE_B:
       mode_avoid();
-      break;
-    case MODE_C:
       break;
     }
   }
@@ -121,10 +118,13 @@ void mode_avoid() {
   delay(200);
 }
 
-
+// choose direction to move if distance < distance_sweep
 void move_choice() {
   int distance_right, distance_left;
 
+  // stop bot
+
+  // get distance in two directions
   servo.write(angle_right);
   distance_right = get_distance();
   delay(300);
@@ -135,6 +135,7 @@ void move_choice() {
 
   servo.write(angle_front);
 
+  // move and indicate direction with LED
   if (distance_right <= distance_left) {
     led_rgb.setColor(2,0,0,100);
     led_rgb.show();
@@ -192,16 +193,18 @@ void check_button() {
   if((0^(analogRead(A7)>10?0:1))){
     if (state > 0) {
       state = 0;
+      mode = MODE_A;
       delay(200);
     } else {
       state = 1;
+      mode = MODE_B;
       delay(200);
     }
     while(!((1^(analogRead(A7)>10?0:1)))){}
   }
 }
 
-void get_ir_command()
+void check_ir_command()
 {
   static long time = millis();
   if (ir.decode())
